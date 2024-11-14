@@ -1,8 +1,11 @@
+using TMPro;
 using UnityEngine;
 
 public class ColorPicker2D : MonoBehaviour
 {
     public Camera renderCamera;
+    [HideInInspector]
+    public Color pointedColor;
 
     void Start()
     {
@@ -44,12 +47,11 @@ public class ColorPicker2D : MonoBehaviour
                 if (x >= 0 && x < texture.width && y >= 0 && y < texture.height)
                 {
                     Color pixelColor = texture.GetPixel(x, y);
-                    Color finalColor = pixelColor * spriteRenderer.color;
-                    Debug.Log("Цвет под курсором: " + finalColor);
+                    pointedColor = pixelColor * spriteRenderer.color;
                 }
                 else
                 {
-                    Debug.Log("Координаты курсора вне границ текстуры");
+                    pointedColor = Color.black;
                 }
             }
         }

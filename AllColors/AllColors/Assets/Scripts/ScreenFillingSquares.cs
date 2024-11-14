@@ -1,23 +1,31 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net.Mime;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 
 public class ScreenFillingSquares : MonoBehaviour
 {
     public GameObject squarePrefab;  // Префаб квадрата
     public Color[] colors;           // Массив цветов
+    public ColorPicker2D _colorPicker2D;
+
+    
+    [SerializeField] private TMP_Text colorRule;
+    [SerializeField] private TMP_Text score;
     
     private float waitTime = 2f;
     private float regenerateTime = 2f;
     private List<GameObject> squares = new List<GameObject>();
     private Color currentColor;
+    
 
     void Start()
     {
         StartCoroutine(CycleSquares());
-
     }
 
 
@@ -37,7 +45,7 @@ public class ScreenFillingSquares : MonoBehaviour
 
         for (int x = 0; x < squaresX; x++)
         {
-            for (int y = 0; y < squaresY; y++)
+            for (int y = 1; y < squaresY - 1; y++)
             {
                 // Позиция для квадрата
                 Vector2 position = new Vector2(-screenWidth / 2 + x * squareSize + squareSize / 2, -screenHeight / 2 + y * squareSize + squareSize / 2);
@@ -59,7 +67,6 @@ public class ScreenFillingSquares : MonoBehaviour
     IEnumerator KeepOneColor( )
     {
         yield return new WaitForSeconds(waitTime);
-        currentColor = colors[Random.Range(0, colors.Length)];
         foreach (GameObject square in squares)
         {
             if (currentColor != square.GetComponent<SpriteRenderer>().color)
@@ -68,7 +75,11 @@ public class ScreenFillingSquares : MonoBehaviour
             }
         }
         squares.RemoveAll(s => s == null || s.GetComponent<SpriteRenderer>().color != currentColor);
-        yield return new WaitForSeconds(2f);
+        Debug.Log(_colorPicker2D.pointedColor);
+        if (currentColor == _colorPicker2D.pointedColor)
+        {
+            score.text = (int.Parse(score.text) + 1).ToString();
+        }
     }
     IEnumerator CycleSquares()
     {
@@ -77,6 +88,7 @@ public class ScreenFillingSquares : MonoBehaviour
             GenerateSquares();
 
             currentColor = colors[Random.Range(0, colors.Length)];
+            colorRule.color = currentColor;
             yield return StartCoroutine(KeepOneColor());
 
             yield return new WaitForSeconds(regenerateTime);
