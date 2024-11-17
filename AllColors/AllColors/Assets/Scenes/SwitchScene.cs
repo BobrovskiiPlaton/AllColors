@@ -5,8 +5,10 @@ using UnityEngine.SceneManagement;
 
 public class SwitchScene : MonoBehaviour
 {
+    public string sceneToLoad;
     public void OnButtonPress()
     {
-        SceneManager.LoadScene("SampleScene");
+        Time.timeScale = 1f;
+        SceneManager.LoadScene(sceneToLoad);
     }
 }
