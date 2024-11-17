@@ -7,6 +7,6 @@ public class SwitchScene : MonoBehaviour
 {
     public void OnButtonPress()
     {
-        SceneManager.LoadScene("Demo");
+        SceneManager.LoadScene("SampleScene");
     }
 }
