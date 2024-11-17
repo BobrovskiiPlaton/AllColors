@@ -28,32 +28,16 @@ public class ColorPicker2D : MonoBehaviour
         {
             // Получаем компонент SpriteRenderer
             SpriteRenderer spriteRenderer = hit.collider.GetComponent<SpriteRenderer>();
-            if (spriteRenderer != null && spriteRenderer.sprite != null)
+            if (spriteRenderer != null)
             {
-                Texture2D texture = spriteRenderer.sprite.texture;
-
-                if (!texture.isReadable)
-                {
-                    Debug.LogError("Texture is not readable. Ensure 'Read/Write Enabled' is checked in the texture import settings.");
-                    return;
-                }
-
-                // Преобразование мировых координат в координаты текстуры
-                Vector2 localPos = hit.point - (Vector2)spriteRenderer.transform.position;
-                float ppu = spriteRenderer.sprite.pixelsPerUnit;
-                int x = Mathf.FloorToInt(localPos.x * ppu + texture.width / 2);
-                int y = Mathf.FloorToInt(localPos.y * ppu + texture.height / 2);
-
-                if (x >= 0 && x < texture.width && y >= 0 && y < texture.height)
-                {
-                    Color pixelColor = texture.GetPixel(x, y);
-                    pointedColor = pixelColor * spriteRenderer.color;
-                }
-                else
-                {
-                    pointedColor = Color.black;
-                }
+                // Устанавливаем pointedColor на основе цвета спрайта
+                pointedColor = spriteRenderer.color;
+            }
+            else
+            {
+                pointedColor = Color.black;
             }
         }
+        //Debug.Log(pointedColor);
     }
 }
